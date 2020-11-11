@@ -1,12 +1,38 @@
 #include <iostream>
+#include <functional> // for std::function
+namespace arithmetic
+{
+    int add(int x, int y)
+    {
+        return x + y;
+    }
+    int subtract(int x, int y)
+    {
+        return x - y;
+    }
+    int multiply(int x, int y)
+    {
+        return x * y;
+    }
+    int divide(int x, int y)
+    {
+        return x / y;
+    }
+}
 int askForInt()
 {
     std::cout << "please give me an integer\n";
     int x;
     std::cin >> x;
+    std::cout << "The integer provided is: " << x << "\n";
     return x;
 }
-char askForOperation()
+void printOperation(char operation)
+{
+    std::cout << "The operation provided is: " << operation << "\n";
+}
+using arithmeticFcn = std::function<int(int, int)>;
+arithmeticFcn askForOperation()
 {
     char x;
     while (true)
@@ -16,40 +42,27 @@ char askForOperation()
         switch (x)
         {
         case '+':
+            printOperation(x);
+            return arithmetic::add;
         case '-':
+            printOperation(x);
+            return arithmetic::subtract;
         case '*':
+            printOperation(x);
+            return arithmetic::multiply;
         case '/':
-            return x;
+            printOperation(x);
+            return arithmetic::divide;
         default:
             std::cout << "undefined operation, please check!\n";
         }
     }
 }
-int add(int x, int y)
-{
-    return x + y;
-}
-int subtract(int x, int y)
-{
-    return x - y;
-}
-int multiply(int x, int y)
-{
-    return x * y;
-}
-int divide(int x, int y)
-{
-    return x / y;
-}
 int main()
 {
-    int x;
-    x = askForInt();
-    
-    char y;
-    y = askForOperation();
-
-
-    std::cout << "Hello! You have inserted: " << y;
+    int x{ askForInt() };
+    arithmeticFcn operation{ askForOperation() };
+    int y{ askForInt() };
+    std::cout << "the result is: " << operation(x,y) << "\n";
     return 0;
 }
